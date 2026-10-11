@@ -23,6 +23,7 @@ import { SuperadminStudents } from './pages/superadmin/Students.jsx'
 import { SuperadminAdmins } from './pages/superadmin/Admins.jsx'
 import { SuperadminDrives } from './pages/superadmin/Drives.jsx'
 import { SuperadminApplications } from './pages/superadmin/Applications.jsx'
+import { AdminProfile } from './pages/admin/Profile.jsx'
 const NAV = {
   student: [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard, group: 'Workspace' },
@@ -41,6 +42,7 @@ const NAV = {
     { id: 'active-students', label: 'Active students', icon: GraduationCap, group: 'Insights' },
     { id: 'analytics', label: 'Analytics', icon: ChartNoAxesCombined, group: 'Insights' },
     { id: 'logs', label: 'System logs', icon: Activity, group: 'Administration' },
+    { id: 'profile', label: 'Admin profile', icon: UserRound, group: 'Administration' },
   ],
   superadmin: [
     { id: 'overview', label: 'System overview', icon: LayoutDashboard, group: 'Workspace' },
@@ -49,6 +51,7 @@ const NAV = {
     { id: 'drives', label: 'Drive overrides', icon: BriefcaseBusiness, group: 'Overrides' },
     { id: 'applications', label: 'Application overrides', icon: ClipboardCheck, group: 'Overrides' },
     { id: 'audit-logs', label: 'Audit trail', icon: Activity, group: 'System' },
+    { id: 'profile', label: 'Superadmin profile', icon: UserRound, group: 'System' },
   ],
 }
 export default function App({ supabase }) {
@@ -237,20 +240,20 @@ export default function App({ supabase }) {
   const openPage = useCallback((nextPage, params = {}) => { setPage(nextPage); setViewParams(params); setSearch(''); setMobileNav(false); window.scrollTo({ top: 0, behavior: 'smooth' }) }, [])
   const currentNav = NAV[role] || NAV.student
   useEffect(() => { if (!currentNav.some(item => item.id === page)) setPage('overview') }, [role, page, currentNav])
-  if (authLoading) return <div className="loading-screen"><div className="loading-brand"><div className="brand-mark"><GraduationCap size={22}/></div><span>IIIT Nagpur <b>· TNP</b></span></div><div className="loader-ring"/><p>Preparing your placement workspace</p></div>
+  if (authLoading) return <div className="loading-screen"><div className="loading-brand"><div className="brand-mark"><img src="/iiitn-logo-transparent.png" alt="IIIT Nagpur" className="brand-logo-img"/></div><span>IIIT Nagpur <b>· TNP</b></span></div><div className="loader-ring"/><p>Preparing your placement workspace</p></div>
   if (!session || !profile) return <LoginScreen googleButtonRef={googleButtonRef} busy={busy} error={authError} configured={Boolean(supabase && GOOGLE_CLIENT_ID)} />
   const pageTitle = currentNav.find(item => item.id === page)?.label || 'Workspace'
   return <div className={`app-shell ${collapsed ? 'sidebar-collapsed' : ''}`}>
     {mobileNav && <button className="mobile-scrim" aria-label="Close navigation" onClick={() => setMobileNav(false)}/>}
     <aside className={`sidebar ${mobileNav ? 'mobile-open' : ''}`}>
-      <div className="sidebar-brand">{collapsed ? <button type="button" className="brand-mark" title="Expand sidebar" aria-label="Expand sidebar" style={{appearance: 'none', border: 0, padding: 0, cursor: 'pointer'}} onClick={() => setCollapsed(false)}><GraduationCap size={21}/></button> : <><button type="button" className="brand-mark" title="Go to overview" aria-label="Go to overview" style={{appearance: 'none', border: 0, padding: 0, cursor: 'pointer'}} onClick={() => openPage('overview')}><GraduationCap size={21}/></button><div className="brand-copy"><strong>IIIT Nagpur</strong><span style={{fontSize: '10px'}}>TRAINING & PLACEMENT</span></div><button type="button" className="sidebar-collapse" title="Collapse sidebar" aria-label="Collapse sidebar" onClick={() => setCollapsed(true)}><PanelLeftClose size={17}/></button></>}</div>
+      <div className="sidebar-brand">{collapsed ? <button type="button" className="brand-mark" title="Expand sidebar" aria-label="Expand sidebar" style={{appearance: 'none', border: 0, padding: 0, cursor: 'pointer'}} onClick={() => setCollapsed(false)}><img src="/iiitn-logo-transparent.png" alt="IIIT Nagpur" className="brand-logo-img"/></button> : <><button type="button" className="brand-mark" title="Go to overview" aria-label="Go to overview" style={{appearance: 'none', border: 0, padding: 0, cursor: 'pointer'}} onClick={() => openPage('overview')}><img src="/iiitn-logo-transparent.png" alt="IIIT Nagpur" className="brand-logo-img"/></button><div className="brand-copy"><strong>IIIT Nagpur</strong><span style={{fontSize: '10px'}}>TRAINING & PLACEMENT</span></div><button type="button" className="sidebar-collapse" title="Collapse sidebar" aria-label="Collapse sidebar" onClick={() => setCollapsed(true)}><PanelLeftClose size={17}/></button></>}</div>
       <div className="workspace-switch"><div className="workspace-monogram">{role === 'student' ? 'S' : role === 'admin' ? 'A' : 'SA'}</div>{!collapsed && <div className="workspace-info"><strong>{roleLabel} workspace</strong><span>Training & Placement</span></div>}</div>
-      <nav className="side-nav">{[...new Set(currentNav.map(x => x.group))].map(group => <div key={group} className="nav-group"><div className="nav-group-label">{!collapsed && group}</div>{currentNav.filter(item => item.group === group).map(item => <button key={item.id} title={collapsed ? item.label : undefined} className={`nav-item ${page === item.id ? 'active' : ''}`} onClick={() => openPage(item.id)}><item.icon size={18}/>{!collapsed && <><span>{item.label}</span>{item.id === 'notifications' && <UnreadBadge api={api}/>}</>}</button>)}</div>)}</nav>
+      <nav className="side-nav">{[...new Set(currentNav.map(x => x.group))].map(group => <div key={group} className="nav-group"><div className="nav-group-label">{!collapsed && group}</div>{currentNav.filter(item => item.group === group).map(item => <button key={item.id} title={collapsed ? item.label : undefined} className={`nav-item ${page === item.id ? 'active' : ''}`} onClick={() => openPage(item.id)}><item.icon key={page === item.id ? `${item.id}-active` : item.id} size={18}/>{!collapsed && <><span>{item.label}</span>{item.id === 'notifications' && <UnreadBadge api={api}/>}</>}</button>)}</div>)}</nav>
       {!collapsed && <div className="sidebar-bottom"><div className="sidebar-footer"><span className="online-dot"/> Placement portal operational</div></div>}
       <div className="sidebar-user"><Avatar name={profile.full_name || user?.email}/>{!collapsed && <div className="user-copy"><strong>{profile.full_name || user?.email?.split('@')[0]}</strong><span>{profile.bt_id || profile.email || user?.email}</span></div>}<button title="Sign out" aria-label="Sign out" className="signout-icon" onClick={() => logout('You have signed out.')}><LogOut size={17}/></button></div>
     </aside>
     <main className="main-area">
-      <header className="topbar"><div className="topbar-left"><button className="mobile-menu" onClick={() => setMobileNav(true)} aria-label="Open navigation"><Menu size={20}/></button><div className="breadcrumb"><span>Workspace</span><ChevronRight size={14}/><strong>{pageTitle}</strong></div></div><div className="topbar-right"><div className="topbar-date"><CalendarDays size={15}/>{niceDate(new Date().toISOString())}</div>{role === 'student' && <><button className="header-icon notification-trigger" aria-label="Notifications" onClick={() => openPage('notifications')}><Bell size={18}/><UnreadBadge api={api}/></button><div className="topbar-divider"/><button className="topbar-profile" onClick={() => openPage('profile')}><Avatar name={profile.full_name || user?.email}/><span><strong>{profile.full_name || 'Student'}</strong><small>{roleLabel}</small></span><ChevronDown size={14}/></button></>}{role !== 'student' && <div className="topbar-profile topbar-profile-static"><Avatar name={profile.full_name || user?.email}/><span><strong>{profile.full_name || user?.email}</strong><small>{roleLabel}</small></span></div>}</div></header>
+      <header className="topbar"><div className="topbar-left"><button className="mobile-menu" onClick={() => setMobileNav(true)} aria-label="Open navigation"><Menu size={20}/></button><div className="breadcrumb"><span>Workspace</span><ChevronRight size={14}/><strong>{pageTitle}</strong></div></div><div className="topbar-right"><div className="topbar-date"><CalendarDays size={15}/>{niceDate(new Date().toISOString())}</div>{role === 'student' && <><button className="header-icon notification-trigger" aria-label="Notifications" onClick={() => openPage('notifications')}><Bell size={18}/><UnreadBadge api={api}/></button><div className="topbar-divider"/><button className="topbar-profile" onClick={() => openPage('profile')}><Avatar name={profile.full_name || user?.email}/><span><strong>{profile.full_name || 'Student'}</strong><small>{roleLabel}</small></span><ChevronDown size={14}/></button></>}{role !== 'student' && <button className="topbar-profile" onClick={() => openPage('profile')} title="View profile"><Avatar name={profile.full_name || user?.email}/><span><strong>{profile.full_name || user?.email}</strong><small>{roleLabel}</small></span><ChevronDown size={14}/></button>}</div></header>
       <div className="content-area" key={`${role}-${page}`}>
         <PageRenderer page={page} role={role} profile={profile} user={user} api={api} notify={notify} busy={busy} setBusy={setBusy} search={search} setSearch={setSearch} openPage={openPage} params={viewParams} refreshKey={refreshKey} setRefreshKey={setRefreshKey} logout={logout}/>
       </div>
@@ -285,6 +288,7 @@ function PageRenderer({ page, role, profile, user, api, notify, busy, setBusy, s
     if (page === 'active-students') return <ActiveStudents {...common}/>
     if (page === 'analytics') return <AdminAnalytics {...common}/>
     if (page === 'logs') return <AdminLogs {...common}/>
+    if (page === 'profile') return <AdminProfile {...common} isSuperadmin={false}/>
   }
   if (role === 'superadmin') {
     if (page === 'overview') return <SuperadminDashboard {...common}/>
@@ -293,6 +297,7 @@ function PageRenderer({ page, role, profile, user, api, notify, busy, setBusy, s
     if (page === 'drives') return <SuperadminDrives {...common}/>
     if (page === 'applications') return <SuperadminApplications {...common}/>
     if (page === 'audit-logs') return <AdminLogs {...common} superadmin/>
+    if (page === 'profile') return <AdminProfile {...common} isSuperadmin={true}/>
   }
   return <EmptyState title="Page not found" description="Choose a section from the navigation to continue."/>
 }

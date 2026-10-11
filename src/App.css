@@ -1,18 +1,21 @@
-/* ───────────────── Brand system ───────────────── */
+/* ───────────────── Brand system (Aligned with TNP_app-main) ───────────────── */
 :root {
-  --navy: #19a88f;
-  --navy2: #137c6c;
-  --orange: #19a88f;
-  --orange-hover: #38d5b2;
-  --canvas: #f7f8fa;
-  --surface: #fff;
-  --muted: #f3f5f8;
-  --text: #111827;
-  --sub: #7e8492;
-  --line: #eaeaec;
+  --navy: #29335C;
+  --navy2: #1E2648;
+  --orange: #FA5A16;
+  --orange-hover: #E04E10;
+  --primary: #1668FE;
+  --primary-dark: #0C53DC;
+  --primary-gradient: #1668FE;
+  --canvas: #f8f9fc;
+  --surface: #ffffff;
+  --muted: #f1f4f9;
+  --text: #1a202c;
+  --sub: #64748b;
+  --line: #e2e8f0;
   --green: #10b981;
-  --blue: #168b78;
-  --shadow: 0 8px 30px rgba(31, 41, 55, .045);
+  --blue: #1668FE;
+  --shadow: 0 4px 20px rgba(41, 51, 92, 0.06);
   --sidebar: 254px
 }
 
@@ -97,21 +100,41 @@ p {
 }
 
 .brand-mark {
-  width: 39px;
-  height: 39px;
+  width: 40px;
+  height: 40px;
   border-radius: 12px;
-  color: #fff;
-  background: linear-gradient(135deg, #19a88f, #117c6d);
+  background: #ffffff;
+  border: 1.5px solid #e2e8f2;
   display: grid;
   place-items: center;
-  box-shadow: 0 6px 12px #19a88f21;
-  flex-shrink: 0
+  box-shadow: 0 4px 14px rgba(22, 104, 254, 0.12);
+  flex-shrink: 0;
+  padding: 3px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.brand-mark:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(22, 104, 254, 0.20);
+}
+
+.brand-logo-img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  display: block;
 }
 
 .brand-mark.large {
-  width: 48px;
-  height: 48px;
-  border-radius: 15px
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  padding: 5px;
+}
+
+.brand-mark.large .brand-logo-img {
+  width: 38px;
+  height: 38px;
 }
 
 .brand-copy {
@@ -258,18 +281,24 @@ p {
 
 .nav-item svg {
   color: #959cab;
-  flex-shrink: 0
+  flex-shrink: 0;
+  transform-origin: 50% 50%;
+  transition: transform 0.25s ease, color 0.15s ease;
 }
 
 .nav-item:hover {
   background: #f8f9fb;
-  color: var(--navy)
+  color: var(--navy);
+}
+
+.nav-item:hover:not(.active) svg {
+  color: var(--navy);
 }
 
 .nav-item.active {
-  background: #e8f8f4;
-  color: var(--orange);
-  font-weight: 800
+  background: #EFF4FF;
+  color: var(--primary);
+  font-weight: 800;
 }
 
 .nav-item.active:before {
@@ -279,12 +308,22 @@ p {
   left: -12px;
   top: 9px;
   bottom: 9px;
-  background: var(--orange);
-  border-radius: 0 5px 5px 0
+  background: var(--primary);
+  border-radius: 0 5px 5px 0;
 }
 
 .nav-item.active svg {
-  color: var(--orange)
+  color: var(--primary);
+  animation: navTabIconRotate 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes navTabIconRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .sidebar-collapsed .side-nav {
@@ -495,7 +534,7 @@ p {
 
 .breadcrumb strong {
   font-weight: 700;
-  color: #19a88f
+  color: var(--navy)
 }
 
 .topbar-right {
@@ -572,7 +611,7 @@ p {
 
 .topbar-profile strong {
   font-size: 13px;
-  color: #19a88f
+  color: var(--navy)
 }
 
 .topbar-profile small {
@@ -667,8 +706,8 @@ p {
   justify-content: center;
   gap: 8px;
   min-height: 38px;
-  border-radius: 9px;
-  padding: 0 14px;
+  border-radius: 12px;
+  padding: 0 16px;
   font-size: 13px;
   font-weight: 800;
   letter-spacing: .005em;
@@ -678,16 +717,16 @@ p {
 }
 
 .btn.primary {
-  background: var(--orange);
+  background: var(--primary);
   color: white;
-  box-shadow: 0 4px 9px #19a88f26
+  box-shadow: 0 4px 14px rgba(22, 104, 254, 0.24)
 }
 
 .btn.primary:hover {
-  background: var(--orange-hover);
-  color: #073b34;
+  background: var(--primary-dark);
+  color: white;
   transform: translateY(-1px);
-  box-shadow: 0 6px 14px #19a88f33
+  box-shadow: 0 6px 18px rgba(22, 104, 254, 0.32)
 }
 
 .btn.outline {
@@ -703,13 +742,14 @@ p {
 }
 
 .btn.text {
-  color: var(--orange);
+  color: var(--primary);
   padding-inline: 7px;
   min-height: 29px
 }
 
 .btn.text:hover {
-  background: #e8f8f4
+  background: #EFF4FF;
+  color: var(--primary-dark)
 }
 
 .btn.danger {
@@ -953,8 +993,8 @@ p {
 }
 
 .search-box:focus-within {
-  border-color: #6edac8;
-  box-shadow: 0 0 0 3px #19a88f0d
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(22, 104, 254, 0.15)
 }
 
 .search-box input {
@@ -1411,7 +1451,7 @@ tbody tr:hover {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  background: radial-gradient(ellipse at 6% 95%, #ffebe3 0, transparent 35%), radial-gradient(ellipse at 92% 5%, #e8efff 0, transparent 35%), #f7f8fb;
+  background: #f8f9fc;
   padding: 48px 7vw 22px
 }
 
@@ -1424,7 +1464,8 @@ tbody tr:hover {
 .orb-one {
   width: 500px;
   height: 500px;
-  border: 1px solid #19a88f09;
+  border: 1px solid rgba(22, 104, 254, 0.08);
+  background: rgba(22, 104, 254, 0.04);
   left: -250px;
   top: 8%
 }
@@ -1432,7 +1473,8 @@ tbody tr:hover {
 .orb-two {
   width: 400px;
   height: 400px;
-  border: 1px solid #19a88f0c;
+  border: 1px solid rgba(250, 90, 22, 0.08);
+  background: rgba(250, 90, 22, 0.04);
   right: -230px;
   bottom: -140px
 }
@@ -1450,6 +1492,58 @@ tbody tr:hover {
 
 .login-story {
   padding: 10px 0
+}
+
+.landing-hero-centerpiece {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.landing-logo-emblem {
+  width: 68px;
+  height: 68px;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1.5px solid #e0e5f2;
+  box-shadow: 0 10px 28px rgba(22, 104, 254, 0.12), 0 2px 6px rgba(0, 0, 0, 0.04);
+  display: grid;
+  place-items: center;
+  padding: 8px;
+  flex-shrink: 0;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.landing-logo-emblem:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 16px 36px rgba(22, 104, 254, 0.20);
+}
+
+.landing-main-logo {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  display: block;
+}
+
+.landing-emblem-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.landing-emblem-copy strong {
+  font: 800 15px Manrope, sans-serif;
+  color: var(--navy);
+  letter-spacing: -.02em;
+}
+
+.landing-tagline {
+  font-size: 11px;
+  color: #9ca3b2;
+  font-weight: 800;
+  letter-spacing: .14em;
 }
 
 .login-wordmark {
@@ -1528,13 +1622,13 @@ tbody tr:hover {
 .login-feature-icon {
   width: 36px;
   height: 36px;
-  background: white;
-  border: 1px solid #e9ebf1;
+  background: #EFF4FF;
+  border: 1px solid #DCE7FF;
   border-radius: 11px;
   display: grid;
   place-items: center;
-  color: var(--navy);
-  box-shadow: 0 3px 9px #19a88f0b
+  color: var(--primary);
+  box-shadow: 0 3px 9px rgba(22, 104, 254, 0.08)
 }
 
 .login-feature-list>div>span:last-child {
@@ -1607,25 +1701,23 @@ tbody tr:hover {
 }
 
 .login-logo-circle {
-  width: 67px;
-  height: 67px;
-  border: 1px solid #e8ebf2;
+  width: 68px;
+  height: 68px;
+  border: 1.5px solid #e2e8f2;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 1px;
-  color: var(--navy);
-  background: linear-gradient(145deg, #fff, #f6f8fc);
-  box-shadow: 0 4px 15px #19a88f0c
+  display: grid;
+  place-items: center;
+  background: #ffffff;
+  box-shadow: 0 6px 20px rgba(22, 104, 254, 0.10);
+  padding: 8px;
+  flex-shrink: 0;
 }
 
-.login-logo-circle span {
-  font-size: 13px;
-  letter-spacing: .09em;
-  font-weight: 900;
-  color: var(--orange)
+.login-card-logo {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  display: block;
 }
 
 .login-pill {
@@ -1841,7 +1933,8 @@ tbody tr:hover {
   margin-bottom: 18px;
   border-radius: 17px;
   min-height: 248px;
-  background: linear-gradient(112deg, #26325a 0%, #354777 68%, #405991 100%);
+  background: #1E2648;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   color: #fff;
   position: relative;
   overflow: hidden;
@@ -1960,12 +2053,12 @@ tbody tr:hover {
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  background: linear-gradient(145deg, #6073aa, #344575);
-  border: 1px solid #ffffff30;
+  background: #29335C;
+  border: 2px solid rgba(255, 255, 255, 0.16);
   display: grid;
   place-items: center;
-  color: #ffd8c3;
-  box-shadow: 0 0 40px #16204470, inset 0 0 22px #ffffff11
+  color: #fff;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
 }
 
 .float-card {
@@ -2881,8 +2974,8 @@ tbody tr:hover {
   display: flex;
   align-items: center;
   gap: 14px;
-  background: linear-gradient(110deg, #f0f3fc, #fbfcff);
-  border: 1px solid #e4e9f6;
+  background: #f8fafd;
+  border: 1px solid #e2e7f2;
   border-radius: 13px;
   padding: 15px 19px;
   margin-bottom: 18px
@@ -3100,7 +3193,8 @@ tbody tr:hover {
   display: grid;
   place-items: center;
   border-radius: 12px;
-  background: linear-gradient(140deg, #f0f3fa, #fbfcfe);
+  background: #f4f6fa;
+  border: 1px solid #e5e9f2;
   overflow: hidden;
   margin-bottom: 17px
 }
@@ -3243,12 +3337,16 @@ tbody tr:hover {
 .profile-hero-copy {
   position: relative;
   z-index: 1;
-  flex: 1
+  flex: 1;
+  min-width: 0;
 }
 
 .profile-hero-copy h2 {
-  font-size: 21px;
-  margin: 4px 0 5px
+  font-size: 24px;
+  line-height: 1.35;
+  margin: 6px 0 8px;
+  padding-top: 2px;
+  overflow: visible;
 }
 
 .profile-hero-copy>p {
@@ -3317,11 +3415,29 @@ tbody tr:hover {
   color: #a0a6b2
 }
 
+.admin-role-badge-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: var(--muted);
+  border: 1px solid var(--line);
+  padding: 12px 16px;
+  border-radius: 12px;
+}
+
 .profile-body-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(275px, .7fr);
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.9fr);
   gap: 18px;
-  margin-top: 18px
+  margin-top: 18px;
+  width: 100%;
+}
+
+@media (max-width: 1200px) {
+  .profile-body-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .profile-fields-grid {
@@ -3804,11 +3920,11 @@ tbody tr:hover {
 }
 
 .pulse-dot.orange {
-  background: #19a88f
+  background: var(--orange)
 }
 
 .pulse-dot.blue {
-  background: #168b78
+  background: var(--primary)
 }
 
 .pulse-track,
@@ -3832,11 +3948,11 @@ tbody tr:hover {
 }
 
 .pulse-track span.orange {
-  background: #19a88f
+  background: var(--orange)
 }
 
 .pulse-track span.blue {
-  background: #168b78
+  background: var(--primary)
 }
 
 .drive-picker-panel {
@@ -3888,9 +4004,9 @@ tbody tr:hover {
   justify-content: space-between;
   gap: 15px;
   padding: 19px 22px;
-  border: 1px solid #e6e9f0;
+  border: 1px solid #e2e6ef;
   border-radius: 13px;
-  background: linear-gradient(110deg, #fff, #fafbfe);
+  background: #ffffff;
   margin-bottom: 15px
 }
 
@@ -4870,7 +4986,7 @@ tbody tr:hover {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(ellipse at 10% 10%, #e8f8f4, transparent 40%), var(--canvas);
+  background: var(--canvas);
   gap: 18px
 }
 
@@ -4910,7 +5026,7 @@ tbody tr:hover {
   min-height: 100vh;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #f8f9fc 0%, #f6f7fa 56%, #fff9f5 100%);
+  background: #f8f9fc;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -4929,7 +5045,7 @@ tbody tr:hover {
   height: 430px;
   right: -160px;
   top: -210px;
-  background: radial-gradient(circle, #e9eefc 0%, #e9eefc40 65%, transparent 70%)
+  background: rgba(22, 104, 254, 0.05);
 }
 
 .orb-two {
@@ -4937,7 +5053,7 @@ tbody tr:hover {
   height: 360px;
   left: -200px;
   bottom: -230px;
-  background: radial-gradient(circle, #ffe8dc 0%, #ffe8dc40 65%, transparent 70%)
+  background: rgba(250, 90, 22, 0.04);
 }
 
 .login-layout {
@@ -5110,7 +5226,7 @@ tbody tr:hover {
   right: 35px;
   top: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--navy), var(--orange));
+  background: var(--primary);
   border-radius: 0 0 8px 8px
 }
 
@@ -5493,8 +5609,8 @@ td b {
   display: grid;
   place-items: center;
   flex-shrink: 0;
-  background: linear-gradient(135deg, #f0f3fa, #fff);
-  border: 1px solid #e5e9f3;
+  background: #ffffff;
+  border: 1px solid #e2e6ef;
   color: var(--navy);
   font: 800 13px Manrope, sans-serif
 }
@@ -5784,9 +5900,10 @@ td b {
 
 .profile-body-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(300px, .8fr);
-  gap: 17px;
-  margin-top: 17px
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.95fr);
+  gap: 18px;
+  margin-top: 18px;
+  width: 100%;
 }
 
 .edit-profile-panel {
@@ -5863,12 +5980,15 @@ td b {
   flex: 1;
   min-width: 0;
   position: relative;
-  z-index: 1
+  z-index: 1;
 }
 
 .profile-hero-copy h2 {
   font-size: 24px;
-  margin: 6px 0
+  line-height: 1.35;
+  margin: 6px 0 8px;
+  padding-top: 2px;
+  overflow: visible;
 }
 
 .profile-hero-copy>p {
@@ -5971,7 +6091,7 @@ td b {
 }
 
 .simple-bar-track i {
-  background: linear-gradient(90deg, #19a88f, #38d5b2)
+  background: var(--primary);
 }
 
 .analytics-facts {
@@ -6168,8 +6288,8 @@ td b {
 }
 
 .resume-choice.selected {
-  border-color: #38d5b2;
-  background: #f1fcf9
+  border-color: var(--primary);
+  background: #EFF4FF
 }
 
 .resume-choice input {
@@ -6305,12 +6425,13 @@ td b {
 .student-hero {
   position: relative;
   border-radius: 17px;
-  background: linear-gradient(108deg, #19a88f 0%, #137967 55%, #138975 100%);
+  background: #1E2648;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   color: #fff;
   padding: 30px 31px 21px;
   overflow: hidden;
   margin-bottom: 18px;
-  box-shadow: 0 16px 45px #19a88f19
+  box-shadow: 0 16px 45px rgba(30, 38, 72, 0.22);
 }
 
 .hero-copy {
@@ -6325,8 +6446,8 @@ td b {
   gap: 7px;
   padding: 7px 10px;
   border-radius: 99px;
-  background: #ffffff15;
-  border: 1px solid #ffffff22;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   font-size: 13px;
   letter-spacing: .13em;
   font-weight: 800;
@@ -6342,7 +6463,7 @@ td b {
 }
 
 .hero-copy h2 span {
-  color: #aaf0e3
+  color: var(--orange);
 }
 
 .hero-copy>p {
@@ -6360,7 +6481,8 @@ td b {
 }
 
 .hero-actions .btn:not(.hero-ghost) {
-  background: var(--orange)
+  background: var(--orange);
+  color: #fff;
 }
 
 .hero-art {
@@ -6380,10 +6502,10 @@ td b {
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: linear-gradient(145deg, #168f7b, #116557);
-  border: 1px solid #8191c5;
-  box-shadow: inset 0 0 0 11px #ffffff08, 0 15px 35px #101b3a50;
-  color: #9feede
+  background: #29335C;
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+  color: #ffffff;
 }
 
 .orbit {
@@ -6477,13 +6599,13 @@ td b {
 }
 
 .metric-icon.orange {
-  background: #e8f8f4;
+  background: #FFF7ED;
   color: var(--orange)
 }
 
 .metric-icon.blue {
-  background: #edf3ff;
-  color: #168b78
+  background: #EFF4FF;
+  color: var(--primary)
 }
 
 .metric-icon.green {
@@ -6503,9 +6625,9 @@ td b {
 }
 
 .metric-value {
-  font: 800 26px Manrope, sans-serif;
-  letter-spacing: -.06em;
-  color: #19a88f
+  font: 800 26px 'Inter', Manrope, sans-serif;
+  letter-spacing: -.04em;
+  color: var(--navy)
 }
 
 .metric-note {
@@ -7391,19 +7513,7 @@ th,
   letter-spacing: .08em
 }
 
-.brand-mark {
-  background: linear-gradient(135deg, #19a88f, #38d5b2);
-  box-shadow: 0 6px 12px #19a88f28
-}
 
-.student-hero {
-  background: linear-gradient(108deg, #137c6c 0%, #19a88f 55%, #38d5b2 100%);
-  box-shadow: 0 16px 45px #19a88f19
-}
-
-.hero-copy h2 span {
-  color: #b9f5e9
-}
 
 
 /* Sidebar typography only: slightly smaller for a cleaner navigation rail. */

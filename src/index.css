@@ -1,3 +1,127 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
-:root{font-family:'DM Sans',sans-serif;font-size:16px;color:#111827;background:#f7f8fa;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;--navy:#19a88f;--navy2:#137c6c;--orange:#19a88f;--orange-hover:#38d5b2;--primary:#19a88f;--primary-hover:#38d5b2;--canvas:#f7f9fb;--surface:#fff;--muted:#effaf7;--text:#111827;--sub:#596b68;--line:#dce9e6;--green:#0f987e;--blue:#168b78}
-*{box-sizing:border-box}html,body,#root{margin:0;min-height:100%;width:100%}body{min-width:320px}button,input,textarea,select{font:inherit}button{cursor:pointer}button:disabled{opacity:.55;cursor:not-allowed}a{color:inherit;text-decoration:none}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #19a88f55;outline-offset:2px}::selection{background:#19a88f25}::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:#d7dbe2;border:2px solid transparent;background-clip:padding-box;border-radius:20px}
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap');
+
+:root {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 16px;
+  color: #111827;
+  background: #f7f8fa;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+
+  /* Brand Palette from TNP_app-main */
+  --primary: #1668FE;
+  --primary-dark: #0C53DC;
+  --primary-hover: #0C53DC;
+  --primary-gradient: linear-gradient(135deg, #1668FE 0%, #0C53DC 100%);
+  --primary-light: #94BFBE;
+  --primary-subtle: #EFF4FF;
+
+  --navy: #29335C;
+  --navy2: #1E2648;
+
+  --secondary: #FA5A16;
+  --orange: #FA5A16;
+  --orange-hover: #E04E10;
+  --orange-subtle: #FFF7ED;
+
+  /* Surfaces & Backgrounds */
+  --canvas: #F7F8FA;
+  --surface: #FFFFFF;
+  --muted: #F3F5F8;
+  --surface-success: #F0FDF4;
+  --surface-success-alt: #EFF4FF;
+
+  /* Borders & Dividers */
+  --line: #EAEAEC;
+  --border: #EAEAEC;
+  --border-strong: #DCDFE5;
+  --border-success: #BBF7D0;
+
+  /* Typography */
+  --text: #111827;
+  --sub: #7E8492;
+  --text-muted: #A1A7B5;
+  --text-disabled: #CBD5E1;
+
+  /* Semantics */
+  --green: #10B981;
+  --green-bg: #ECFDF5;
+  --blue: #1668FE;
+  --error: #EF4444;
+  --error-bg: #FEE2E2;
+
+  /* Elevation / Shadows */
+  --shadow: 0 4px 16px rgba(17, 24, 39, 0.04);
+  --shadow-hover: 0 8px 24px rgba(22, 104, 254, 0.08);
+  --shadow-primary: 0 4px 16px rgba(22, 104, 254, 0.28);
+  --shadow-cta: 0 4px 14px rgba(250, 90, 22, 0.25);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+  width: 100%;
+}
+
+body {
+  min-width: 320px;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(22, 104, 254, 0.35);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: rgba(22, 104, 254, 0.15);
+  color: #111827;
+}
+
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D7DBE2;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #BCC2CD;
+  background-clip: padding-box;
+}
