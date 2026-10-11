@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Activity, Bell, BriefcaseBusiness, CalendarDays, ChevronDown, ChevronRight, ClipboardCheck, FileText, GraduationCap, LayoutDashboard, LogOut, Menu, Plus, ShieldCheck, UserRound, Users, PanelLeftClose, PanelLeftOpen, ChartNoAxesCombined, ListChecks } from 'lucide-react'
+import { Activity, Bell, BriefcaseBusiness, CalendarDays, ChevronDown, ChevronRight, ClipboardCheck, FileText, GraduationCap, LayoutDashboard, LogOut, Menu, Plus, ShieldCheck, UserRound, Users, PanelLeftClose, ChartNoAxesCombined, ListChecks } from 'lucide-react'
 import './App.css'
 import { API_BASE, GOOGLE_CLIENT_ID, COLLEGE_DOMAIN, loadGoogleIdentityServices, hashNonce } from './config.js'
 import { Avatar, Toast, niceDate, readError, getProfile, dataOf, EmptyState } from './components/ui.jsx'
@@ -23,7 +23,6 @@ import { SuperadminStudents } from './pages/superadmin/Students.jsx'
 import { SuperadminAdmins } from './pages/superadmin/Admins.jsx'
 import { SuperadminDrives } from './pages/superadmin/Drives.jsx'
 import { SuperadminApplications } from './pages/superadmin/Applications.jsx'
-
 const NAV = {
   student: [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard, group: 'Workspace' },
@@ -52,7 +51,6 @@ const NAV = {
     { id: 'audit-logs', label: 'Audit trail', icon: Activity, group: 'System' },
   ],
 }
-
 export default function App({ supabase }) {
   const [session, setSession] = useState(null)
   const [user, setUser] = useState(null)
@@ -70,18 +68,14 @@ export default function App({ supabase }) {
   const [googleAttempt, setGoogleAttempt] = useState(0)
   const googleButtonRef = useRef(null)
   const profileLoadRef = useRef(null)
-  
-
   const notify = useCallback((message, type = 'success') => setToast({ message, type, id: Date.now() }), [])
   const role = profile?.is_superadmin ? 'superadmin' : profile?.is_admin ? 'admin' : 'student'
   const roleLabel = role === 'superadmin' ? 'Superadmin' : role === 'admin' ? 'Placement admin' : 'Student'
-
   const logout = useCallback(async (message) => {
     if (supabase) await supabase.auth.signOut().catch(() => {})
     setSession(null); setUser(null); setProfile(null); setPage('overview'); setViewParams({});
     if (message) setToast({ message, type: 'info', id: Date.now() })
   }, [supabase])
-
   const api = useCallback(async (path, options = {}) => {
     if (!supabase) throw new Error('Supabase configuration is missing. Check your .env file.')
     const { data: { session: currentSession } } = await supabase.auth.getSession()
@@ -108,12 +102,10 @@ export default function App({ supabase }) {
     if (!response.ok) throw new Error(typeof result === 'object' ? readError(result, `Request failed (${response.status})`) : String(result || `Request failed (${response.status})`))
     return { data: result, response }
   }, [supabase, logout])
-
   const loadProfile = useCallback(async (activeSession) => {
     if (!activeSession || !supabase) { setProfile(null); return null }
     const token = activeSession.access_token
     if (profileLoadRef.current?.token === token) return profileLoadRef.current.promise
-
     const promise = (async () => {
       try {
         let response
@@ -146,7 +138,6 @@ export default function App({ supabase }) {
       if (profileLoadRef.current?.token === token) profileLoadRef.current = null
     }
   }, [supabase])
-
   useEffect(() => {
     let alive = true
     if (!supabase) { setAuthLoading(false); setAuthError('Supabase environment variables are missing.'); return undefined }
@@ -163,7 +154,6 @@ export default function App({ supabase }) {
     })
     return () => { alive = false; subscription.unsubscribe() }
   }, [supabase, loadProfile])
-
   const signInWithGoogleToken = useCallback(async (credential, nonce) => {
     const claims = decodeJwt(credential)
     const email = String(claims?.email || '').trim().toLowerCase()
@@ -204,7 +194,6 @@ export default function App({ supabase }) {
       setGoogleAttempt(value => value + 1)
     }
   }, [supabase, loadProfile, notify])
-
   useEffect(() => {
     // The login card is intentionally not mounted until the persisted Supabase
     // session has been checked. Wait for authLoading to finish so this effect
@@ -212,7 +201,6 @@ export default function App({ supabase }) {
     if (authLoading || session || !GOOGLE_CLIENT_ID || !googleButtonRef.current) return undefined
     let cancelled = false
     googleButtonRef.current.innerHTML = ''
-
     const initialize = async () => {
       try {
         const nonce = createNonce()
@@ -243,23 +231,19 @@ export default function App({ supabase }) {
         if (!cancelled) setAuthError(error?.message || 'Could not initialize Google sign-in. Check your Web Client ID and JavaScript origin.')
       }
     }
-
     initialize()
     return () => { cancelled = true }
   }, [authLoading, session, signInWithGoogleToken, googleAttempt])
-
   const openPage = useCallback((nextPage, params = {}) => { setPage(nextPage); setViewParams(params); setSearch(''); setMobileNav(false); window.scrollTo({ top: 0, behavior: 'smooth' }) }, [])
   const currentNav = NAV[role] || NAV.student
   useEffect(() => { if (!currentNav.some(item => item.id === page)) setPage('overview') }, [role, page, currentNav])
-
   if (authLoading) return <div className="loading-screen"><div className="loading-brand"><div className="brand-mark"><GraduationCap size={22}/></div><span>IIIT Nagpur <b>· TNP</b></span></div><div className="loader-ring"/><p>Preparing your placement workspace</p></div>
   if (!session || !profile) return <LoginScreen googleButtonRef={googleButtonRef} busy={busy} error={authError} configured={Boolean(supabase && GOOGLE_CLIENT_ID)} />
-
   const pageTitle = currentNav.find(item => item.id === page)?.label || 'Workspace'
   return <div className={`app-shell ${collapsed ? 'sidebar-collapsed' : ''}`}>
     {mobileNav && <button className="mobile-scrim" aria-label="Close navigation" onClick={() => setMobileNav(false)}/>}
     <aside className={`sidebar ${mobileNav ? 'mobile-open' : ''}`}>
-      <div className="sidebar-brand"><div className="brand-mark"><GraduationCap size={21}/></div>{!collapsed && <div className="brand-copy"><strong>IIIT Nagpur</strong><span>TRAINING &amp; PLACEMENT</span></div>}<button className="sidebar-collapse" title="Collapse sidebar" onClick={() => setCollapsed(!collapsed)}>{collapsed ? <PanelLeftOpen size={17}/> : <PanelLeftClose size={17}/>}</button></div>
+      <div className="sidebar-brand">{collapsed ? <button type="button" className="brand-mark" title="Expand sidebar" aria-label="Expand sidebar" style={{appearance: 'none', border: 0, padding: 0, cursor: 'pointer'}} onClick={() => setCollapsed(false)}><GraduationCap size={21}/></button> : <><div className="brand-mark"><GraduationCap size={21}/></div><div className="brand-copy"><strong>IIIT Nagpur</strong><span style={{fontSize: '10px'}}>TRAINING & PLACEMENT</span></div><button type="button" className="sidebar-collapse" title="Collapse sidebar" aria-label="Collapse sidebar" onClick={() => setCollapsed(true)}><PanelLeftClose size={17}/></button></>}</div>
       <div className="workspace-switch"><div className="workspace-monogram">{role === 'student' ? 'S' : role === 'admin' ? 'A' : 'SA'}</div>{!collapsed && <div className="workspace-info"><strong>{roleLabel} workspace</strong><span>Training & Placement</span></div>}</div>
       <nav className="side-nav">{[...new Set(currentNav.map(x => x.group))].map(group => <div key={group} className="nav-group"><div className="nav-group-label">{!collapsed && group}</div>{currentNav.filter(item => item.group === group).map(item => <button key={item.id} title={collapsed ? item.label : undefined} className={`nav-item ${page === item.id ? 'active' : ''}`} onClick={() => openPage(item.id)}><item.icon size={18}/>{!collapsed && <><span>{item.label}</span>{item.id === 'notifications' && <UnreadBadge api={api}/>}</>}</button>)}</div>)}</nav>
       {!collapsed && <div className="sidebar-bottom"><div className="sidebar-footer"><span className="online-dot"/> Placement portal operational</div></div>}
