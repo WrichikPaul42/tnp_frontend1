@@ -159,33 +159,42 @@ p {
   white-space: nowrap
 }
 
-.sidebar-collapse {
-  margin-left: auto;
-  display: grid;
-  place-items: center;
-  color: #a4aab6;
-  padding: 6px;
-  border-radius: 7px
-}
-
-.sidebar-collapse:hover {
-  background: var(--muted);
-  color: var(--navy)
-}
-
 .sidebar-collapsed .sidebar-brand {
   padding: 0 21px;
   position: relative
 }
 
-.sidebar-collapsed .sidebar-collapse {
+.sidebar-toggle {
   position: absolute;
-  bottom: -29px;
-  left: 28px;
-  background: #fff;
+  top: 47%;
+  right: -16px;
+  transform: translateY(-50%);
+  z-index: 2;
+
+  width: 30px;
+  height: 35px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+
   border: 1px solid var(--line);
-  z-index: 1;
-  box-shadow: 0 2px 5px #00000008
+  border-radius: 50px;
+  background: #fff;
+  color: #7d8799;
+  box-shadow: 0 4px 14px rgba(41, 51, 92, 0.10);
+  cursor: pointer;
+  transition: color .15s ease, background .15s ease, box-shadow .15s ease;
+}
+
+.sidebar-toggle:hover {
+  color: var(--primary);
+  background: #f8faff;
+  box-shadow: 0 5px 16px rgba(22, 104, 254, 0.15);
+}
+
+.sidebar-toggle:focus-visible {
+  outline: 3px solid rgba(22, 104, 254, 0.28);
+  outline-offset: 2px;
 }
 
 .workspace-switch {
@@ -613,7 +622,7 @@ p {
   min-width: 16px;
   height: 16px;
   padding: 0 4px;
-  border-radius: 20px;
+  border-radius: 100%; /* 20 px */
   background: var(--orange);
   border: 2px solid white;
   color: white;
@@ -3444,7 +3453,7 @@ tbody tr:hover {
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: conic-gradient(var(--orange) 0 72%, #f1f2f5 72% 100%);
+  background: conic-gradient(var(--orange) 0 var(--progress, 0%), #f1f2f5 var(--progress, 0%) 100%);
   position: relative
 }
 
@@ -6086,7 +6095,7 @@ td b {
   width: 61px;
   height: 61px;
   border-radius: 50%;
-  background: conic-gradient(var(--orange) 0 var(--progress, 72%), #eff1f5 var(--progress, 72%) 100%);
+  background: conic-gradient(var(--orange) 0 var(--progress, 0%), #eff1f5 var(--progress, 0%) 100%);
   display: grid;
   place-items: center;
   position: relative
@@ -6773,10 +6782,6 @@ td b {
     --sidebar: 235px
   }
 
-  .sidebar-collapse {
-    display: none
-  }
-
   .topbar {
     height: 64px;
     padding-inline: 18px
@@ -6887,10 +6892,6 @@ td b {
 
   .sidebar-collapsed .sidebar-brand {
     padding-inline: 18px
-  }
-
-  .sidebar-collapsed .sidebar-collapse {
-    display: none
   }
 
   .sidebar-collapsed .workspace-switch {
