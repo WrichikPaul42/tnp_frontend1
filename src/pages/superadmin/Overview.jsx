@@ -1,5 +1,181 @@
-import { BriefcaseBusiness, ClipboardCheck, Database, GraduationCap, RefreshCw, ShieldCheck } from 'lucide-react'
-import { QuickAction } from '../admin/Overview.jsx'
-import { StatusBadge, EmptyState, Metric, PageTitle, Skeleton, Button, useData, LoadPanel, ContentPanel, errorSummary } from '../../components/ui.jsx'
+import {
+  BriefcaseBusiness,
+  ClipboardCheck,
+  Database,
+  GraduationCap,
+  RefreshCw,
+  ShieldCheck,
+} from "lucide-react";
+import { QuickAction } from "../admin/Overview.jsx";
+import {
+  StatusBadge,
+  EmptyState,
+  Metric,
+  PageTitle,
+  Skeleton,
+  Button,
+  useData,
+  LoadPanel,
+  ContentPanel,
+  errorSummary,
+} from "../../components/ui.jsx";
 
-export function SuperadminDashboard({api,openPage}){const state=useData(api,'/api/superadmin/stats');const db=useData(api,'/api/superadmin/database/overview');const data=state.data||{};const counts=data.counts||{};const tables=db.data?.database_tables||{};return <><PageTitle eyebrow="PLATFORM CONTROL CENTER" title="System overview" description="Monitor the placement ecosystem, manage access privileges, and keep the student database healthy." actions={<Button variant="outline" icon={RefreshCw} onClick={()=>{state.reload();db.reload()}}>Refresh overview</Button>}/>{state.loading?<div className="metrics-grid">{[1,2,3,4].map(i=><div className="panel" key={i}><Skeleton rows={2}/></div>)}</div>:state.error?<div className="panel"><LoadPanel state={state} onRetry={state.reload}/></div>:<div className="metrics-grid"><Metric label="Total students" value={counts.total_students??'—'} note="Verified college directory" icon={GraduationCap} color="blue"/><Metric label="Placement drives" value={counts.total_drives??'—'} note={`${data.drives_by_status?.open||0} currently open`} icon={BriefcaseBusiness} color="orange"/><Metric label="Applications" value={counts.total_applications??'—'} note="Across all drives" icon={ClipboardCheck} color="green"/><Metric label="Admin accounts" value={(counts.total_admins??0)+(counts.total_superadmins??0)} note={`${counts.total_superadmins||0} superadmins`} icon={ShieldCheck} color="violet"/></div>}<div className="dashboard-grid system-dashboard-grid"><ContentPanel title="Branch distribution" subtitle="Student population by academic branch">{Object.keys(data.branch_distribution||{}).length?<div className="branch-distribution">{Object.entries(data.branch_distribution).sort((a,b)=>b[1]-a[1]).map(([branch,count])=><div key={branch} className="branch-dist-item"><div><span className="branch-chip">{branch}</span><b>{count}</b></div><div className="simple-bar-track"><i style={{width:`${count/Math.max(1,...Object.values(data.branch_distribution))*100}%`}}/></div></div>)}</div>:state.loading?<Skeleton rows={3}/>:<EmptyState icon={GraduationCap} title="No branch statistics"/>}</ContentPanel><ContentPanel title="Database health" subtitle="Core table record counts" action={<Database size={19} className="muted-icon"/>}>{db.loading?<Skeleton rows={4}/>:db.error?errorSummary(db):<div className="database-table-list">{Object.entries(tables).map(([name,count])=><div key={name}><span><Database size={14}/>{name}</span><b>{count}</b><StatusBadge status="success">Healthy</StatusBadge></div>)}</div>}</ContentPanel></div><ContentPanel title="Platform controls" subtitle="Quick access to high-impact administration"><div className="quick-actions-grid"><QuickAction icon={GraduationCap} title="Student directory" description="Review, import, update, and delete records" onClick={()=>openPage('students')}/><QuickAction icon={ShieldCheck} title="Manage admin roles" description="Grant or revoke administrative access" onClick={()=>openPage('admins')}/><QuickAction icon={BriefcaseBusiness} title="Drive overrides" description="Override drive status and metadata" onClick={()=>openPage('drives')}/><QuickAction icon={ClipboardCheck} title="Application overrides" description="Correct application records" onClick={()=>openPage('applications')}/></div></ContentPanel></>}
+export function SuperadminDashboard({ api, openPage }) {
+  const state = useData(api, "/api/superadmin/stats");
+  const db = useData(api, "/api/superadmin/database/overview");
+  const data = state.data || {};
+  const counts = data.counts || {};
+  const tables = db.data?.database_tables || {};
+  return (
+    <>
+      <PageTitle
+        eyebrow="PLATFORM CONTROL CENTER"
+        title="System overview"
+        description="Monitor the placement ecosystem, manage access privileges, and keep the student database healthy."
+        actions={
+          <Button
+            variant="outline"
+            icon={RefreshCw}
+            onClick={() => {
+              state.reload();
+              db.reload();
+            }}
+          >
+            Refresh
+          </Button>
+        }
+      />
+      {state.loading ? (
+        <div className="metrics-grid">
+          {[1, 2, 3, 4].map((i) => (
+            <div className="panel" key={i}>
+              <Skeleton rows={2} />
+            </div>
+          ))}
+        </div>
+      ) : state.error ? (
+        <div className="panel">
+          <LoadPanel state={state} onRetry={state.reload} />
+        </div>
+      ) : (
+        <div className="metrics-grid">
+          <Metric
+            label="Total students"
+            value={counts.total_students ?? "—"}
+            note="Verified college directory"
+            icon={GraduationCap}
+            color="blue"
+          />
+          <Metric
+            label="Placement drives"
+            value={counts.total_drives ?? "—"}
+            note={`${data.drives_by_status?.open || 0} currently open`}
+            icon={BriefcaseBusiness}
+            color="orange"
+          />
+          <Metric
+            label="Applications"
+            value={counts.total_applications ?? "—"}
+            note="Across all drives"
+            icon={ClipboardCheck}
+            color="green"
+          />
+          <Metric
+            label="Admin accounts"
+            value={(counts.total_admins ?? 0) + (counts.total_superadmins ?? 0)}
+            note={`${counts.total_superadmins || 0} superadmins`}
+            icon={ShieldCheck}
+            color="violet"
+          />
+        </div>
+      )}
+      <div className="dashboard-grid system-dashboard-grid">
+        <ContentPanel
+          title="Branch distribution"
+          subtitle="Student population by academic branch"
+        >
+          {Object.keys(data.branch_distribution || {}).length ? (
+            <div className="branch-distribution">
+              {Object.entries(data.branch_distribution)
+                .sort((a, b) => b[1] - a[1])
+                .map(([branch, count]) => (
+                  <div key={branch} className="branch-dist-item">
+                    <div>
+                      <span className="branch-chip">{branch}</span>
+                      <b>{count}</b>
+                    </div>
+                    <div className="simple-bar-track">
+                      <i
+                        style={{
+                          width: `${(count / Math.max(1, ...Object.values(data.branch_distribution))) * 100}%`,
+                        }}
+                      />
+                    </div>
+                  </div>
+                ))}
+            </div>
+          ) : state.loading ? (
+            <Skeleton rows={3} />
+          ) : (
+            <EmptyState icon={GraduationCap} title="No branch statistics" />
+          )}
+        </ContentPanel>
+        <ContentPanel
+          title="Database health"
+          subtitle="Core table record counts"
+          action={<Database size={19} className="muted-icon" />}
+        >
+          {db.loading ? (
+            <Skeleton rows={4} />
+          ) : db.error ? (
+            errorSummary(db)
+          ) : (
+            <div className="database-table-list">
+              {Object.entries(tables).map(([name, count]) => (
+                <div key={name}>
+                  <span>
+                    <Database size={14} />
+                    {name}
+                  </span>
+                  <b>{count}</b>
+                  <StatusBadge status="success">Healthy</StatusBadge>
+                </div>
+              ))}
+            </div>
+          )}
+        </ContentPanel>
+      </div>
+      <ContentPanel
+        title="Platform controls"
+        subtitle="Quick access to high-impact administration"
+      >
+        <div className="quick-actions-grid">
+          <QuickAction
+            icon={GraduationCap}
+            title="Student directory"
+            description="Review, import, update, and delete records"
+            onClick={() => openPage("students")}
+          />
+          <QuickAction
+            icon={ShieldCheck}
+            title="Manage admin roles"
+            description="Grant or revoke administrative access"
+            onClick={() => openPage("admins")}
+          />
+          <QuickAction
+            icon={BriefcaseBusiness}
+            title="Drive overrides"
+            description="Override drive status and metadata"
+            onClick={() => openPage("drives")}
+          />
+          <QuickAction
+            icon={ClipboardCheck}
+            title="Application overrides"
+            description="Correct application records"
+            onClick={() => openPage("applications")}
+          />
+        </div>
+      </ContentPanel>
+    </>
+  );
+}
