@@ -4,7 +4,7 @@ Responsive React + Vite web portal for students, placement administrators, and s
 
 ## Run locally
 
-Requires Node.js 20.19+ or 22.12+ (recommended for Vite 8).
+Requires Node.js 20.19+ or 22.12+ (recommended for Vite 8)
 
 ```bash
 cp .env.example .env
@@ -41,7 +41,6 @@ Google receives the SHA-256 hash of a fresh cryptographic nonce, while `supabase
 A Vite development proxy is **not included in a static production build**. In production, the browser calls `VITE_BACKEND_API_URL` directly, so the deployed FastAPI backend must allow the exact origin where this frontend is hosted. Configure the backend's `CORSMiddleware` with the production origin (and local origins only if needed), the methods `GET, POST, PUT, PATCH, DELETE, OPTIONS`, and headers `Authorization, Content-Type, Accept`. Avoid combining unrestricted `allow_origins=["*"]` with credentials in a public deployment. After changing backend CORS settings, redeploy the backend; frontend code alone cannot change CORS headers returned by a separately hosted API.
 
 Uploads follow the backend's signed-URL handshake. Browser uploads go directly to Supabase Storage; if a browser reports CORS specifically for a `storage/v1/object/upload/sign/...` URL, that is a separate Storage-origin issue, not the FastAPI API proxy.
-
 
 ## Source structure
 
