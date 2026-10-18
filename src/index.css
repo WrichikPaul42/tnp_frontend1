@@ -95,13 +95,32 @@ a {
   text-decoration: none;
 }
 
+/* Remove the default blue focus ring across every shared workspace.
+   Keep focus discoverable with subtle neutral styling instead. */
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-  outline: 3px solid rgba(22, 104, 254, 0.35);
-  outline-offset: 2px;
+  outline: none !important;
+  outline-offset: 0;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  box-shadow: 0 0 0 2px rgba(148, 163, 184, 0.16);
+}
+
+.search-box input:focus-visible,
+.select-wrap select:focus-visible {
+  box-shadow: none;
+}
+
+.search-box:focus-within,
+.select-wrap:focus-within {
+  border-color: #cbd5e1;
+  box-shadow: 0 0 0 2px rgba(148, 163, 184, 0.12);
 }
 
 ::selection {

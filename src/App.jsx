@@ -16,8 +16,6 @@ import {
   ShieldCheck,
   UserRound,
   Users,
-  PanelLeftClose,
-  PanelLeftOpen,
   ChartNoAxesCombined,
   ListChecks,
 } from "lucide-react";

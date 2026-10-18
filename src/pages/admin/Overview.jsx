@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -31,8 +32,79 @@ export function AdminDashboard({ api, openPage }) {
   const drives = dataOf(drivesState.data, "drives");
   const applicants = dataOf(applicantsState.data, "applicants");
   const students = dataOf(studentsState.data, "students");
+  const [roundsState, setRoundsState] = useState({
+    loading: true,
+    count: 0,
+    error: "",
+  });
+
+  // The drives endpoint intentionally does not embed rounds. Load them from
+  // the existing per-drive rounds endpoint and add their counts together.
+  useEffect(() => {
+    let cancelled = false;
+
+    if (drivesState.loading) {
+      setRoundsState((current) =>
+        current.loading ? current : { ...current, loading: true },
+      );
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    if (drivesState.error) {
+      setRoundsState({ loading: false, count: 0, error: drivesState.error });
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    const driveRows = dataOf(drivesState.data, "drives");
+    if (!driveRows.length) {
+      setRoundsState({ loading: false, count: 0, error: "" });
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    setRoundsState({ loading: true, count: 0, error: "" });
+
+    Promise.all(
+      driveRows.map(async (drive) => {
+        const { data } = await api(`/api/admin/drives/${drive.id}/rounds`);
+        if (Array.isArray(data?.rounds)) return data.rounds.length;
+        if (Array.isArray(data)) return data.length;
+        const total = Number(data?.total_rounds);
+        return Number.isFinite(total) && total >= 0 ? total : 0;
+      }),
+    )
+      .then((counts) => {
+        if (!cancelled) {
+          setRoundsState({
+            loading: false,
+            count: counts.reduce((total, count) => total + count, 0),
+            error: "",
+          });
+        }
+      })
+      .catch((error) => {
+        if (!cancelled) {
+          setRoundsState({
+            loading: false,
+            count: 0,
+            error: error?.message || "Could not load selection rounds.",
+          });
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [api, drivesState.data, drivesState.error, drivesState.loading]);
+
   const loading =
     drivesState.loading || applicantsState.loading || studentsState.loading;
+
   return (
     <>
       <PageTitle
@@ -49,7 +121,7 @@ export function AdminDashboard({ api, openPage }) {
         <Metric
           label="Total drives"
           value={loading ? "—" : drives.length}
-          // note={`${drives.filter((d) => String(d.status).toLowerCase() === "open").length} currently open`}
+          note={`${drives.filter((d) => String(d.status).toLowerCase() === "open").length} currently open`}
           icon={BriefcaseBusiness}
           color="orange"
         />
@@ -58,21 +130,29 @@ export function AdminDashboard({ api, openPage }) {
           value={
             loading ? "—" : (applicantsState.data?.count ?? applicants.length)
           }
-          // note="Across recruitment drives"
+          note="Across recruitment drives"
           icon={Users}
           color="blue"
         />
         <Metric
           label="Active students"
           value={loading ? "—" : (studentsState.data?.count ?? students.length)}
-          // note="Recently active on portal"
+          note="Recently active on portal"
           icon={GraduationCap}
           color="green"
         />
         <Metric
           label="Selection rounds"
-          value={drives.reduce((n, d) => n + (d.rounds?.length || 0), 0) || "—"}
-          // note="Configured across drives"
+          value={
+            drivesState.loading || roundsState.loading || roundsState.error
+              ? "—"
+              : roundsState.count
+          }
+          note={
+            roundsState.error
+              ? "Unable to load rounds"
+              : "Configured across all drives"
+          }
           icon={ListChecks}
           color="violet"
         />
@@ -99,9 +179,7 @@ export function AdminDashboard({ api, openPage }) {
                   className="recent-drive-row"
                   onClick={() => openPage("rounds", { driveId: d.id })}
                 >
-                  <div className="company-avatar">
-                    {initials(d.company_name)}
-                  </div>
+                  <div className="company-avatar">{initials(d.company_name)}</div>
                   <div>
                     <b>{d.company_name}</b>
                     <span>{d.role_title}</span>
@@ -191,6 +269,7 @@ export function AdminDashboard({ api, openPage }) {
     </>
   );
 }
+
 export function QuickAction({ icon: Icon, title, description, onClick }) {
   return (
     <button className="quick-action" onClick={onClick}>
@@ -205,6 +284,7 @@ export function QuickAction({ icon: Icon, title, description, onClick }) {
     </button>
   );
 }
+
 function PulseStatus({ label, count, all, tone }) {
   return (
     <div className="pulse-item">
